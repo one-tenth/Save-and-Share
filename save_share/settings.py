@@ -135,13 +135,23 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'mysite.Member'
 
+#-----------------------------------
+#讀取.env檔案
+from decouple import config
 
+# Security
+SECRET_KEY = config('SECRET_KEY')
 
+# Database
+DATABASE_URL = config('DATABASE_URL')
 
+# API Keys
+GOOGLE_API_KEY = config('GOOGLE_API_KEY')
+STRIPE_API_KEY = config('STRIPE_API_KEY')
+SENDGRID_API_KEY = config('SENDGRID_API_KEY')
+AWS_ACCESS_KEY = config('AWS_ACCESS_KEY')
+AWS_SECRET_KEY = config('AWS_SECRET_KEY')
 
-import os
-
-CSRF_TRUSTED_ORIGINS = [
-    "http://127.0.0.1:8000",
-    "http://localhost:8000"
-]
+# Debug Mode
+DEBUG = config('DEBUG', default=False, cast=bool)
+#-----------------------------------
