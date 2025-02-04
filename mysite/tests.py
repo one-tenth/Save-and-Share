@@ -1,3 +1,4 @@
+
 import cv2
 from pyzbar.pyzbar import decode
 
@@ -10,3 +11,4 @@ decoded_objects = decode(gray_image)
 for obj in decoded_objects:
     print('Type:', obj.type)
     print('Data:', obj.data.decode('utf-8'))
+
