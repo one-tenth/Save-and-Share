@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from mysite import views
 
 #-----------------------------
@@ -27,4 +27,5 @@ urlpatterns = [
     path('logout/', views.user_logout, name='logout'),
     path('record_input/', views.record_input, name='record_input'),
     path('category_management/', views.category_management, name='category_management'),  # 顯示所有分類並管理
+    path('upload_file/', views.upload_file, name='upload_file'),
 ]

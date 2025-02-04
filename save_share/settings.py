@@ -155,3 +155,4 @@ AWS_SECRET_KEY = config('AWS_SECRET_KEY')
 # Debug Mode
 DEBUG = config('DEBUG', default=False, cast=bool)
 #-----------------------------------
+

@@ -110,7 +110,48 @@ def category_management(request):
         'category_form': category_form,
     })
 
+#---------------------------------------------------------------
+#相機
+import cv2
+import numpy as np
+from pyzbar.pyzbar import decode
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render
+from django.core.files.base import ContentFile
+import base64
+import re
 
+@csrf_exempt
+def upload_file(request):
+    if request.method == 'POST':
+        image_data = request.POST.get('image')  # 取得 Base64 圖片數據
+        
+        if not image_data:
+            return render(request, 'capture_image.html', {'error': '請提供有效的圖片'})
 
+        try:
+            # 移除 base64 前綴，例如 "data:image/png;base64,"
+            image_data = re.sub('^data:image/.+;base64,', '', image_data)
+            image_bytes = base64.b64decode(image_data)  # 轉換回二進位格式
+            # print(image_bytes)
 
+            # 轉換成 OpenCV 可讀格式
+            image_array = np.frombuffer(image_bytes, dtype=np.uint8)
+            image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
+            
+            # 轉換為灰階影像提高辨識率
+            gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            decoded_objects = decode(gray_image)
 
+            if not decoded_objects:
+                return render(request, 'capture_image.html', {'error': '無法識別 QR Code'})
+
+            result = [obj.data.decode('utf-8') for obj in decoded_objects]
+
+            return render(request, 'capture_image.html', {'message': '解析成功', 'data': result})
+
+        except Exception as e:
+            return render(request, 'capture_image.html', {'error': f'圖片處理錯誤: {str(e)}'})
+
+    return render(request, 'capture_image.html', {'error': '請使用 POST 方法上傳圖片'})
