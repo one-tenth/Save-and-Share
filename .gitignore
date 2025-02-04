@@ -15,15 +15,7 @@ staticfiles/
 .vscode/
 
 # 忽略環境變數文件
-.env"db.sqlite3" 
-"__pycache__/" 
-"staticfiles/" 
-".vscode/" 
-".env" 
-"__pycache__/" 
-"staticfiles/" 
-".vscode/" 
-".env" 
+.env
 "db.sqlite3" 
 "__pycache__/" 
 "staticfiles/" 
