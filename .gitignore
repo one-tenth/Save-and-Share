@@ -21,3 +21,8 @@ staticfiles/
 "staticfiles/" 
 ".vscode/" 
 ".env" 
+
+
+# 忽略 SSL/TLS 憑證
+cert.crt
+cert.key
