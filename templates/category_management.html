@@ -1,0 +1,32 @@
+<!-- templates/category_management.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分類管理</title>
+</head>
+<body>
+    <h1>分類管理</h1>
+
+    <h2>現有分類</h2>
+    <ul>
+        {% for category in categories %}
+            <li>
+                {{ category.category_name }}
+                <a href="{% url 'edit_category' category.id %}">編輯</a> |
+                <a href="{% url 'delete_category' category.id %}" onclick="return confirm('確定刪除該分類嗎？')">刪除</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h2>新增分類</h2>
+    <form method="post" action="{% url 'create_category' %}">
+        {% csrf_token %}
+        {{ category_form.as_p }}
+        <button type="submit">新增分類</button>
+    </form>
+
+    <a href="{% url 'record_input' %}">返回記帳頁面</a>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>記帳 APP</title>
+    <link rel="stylesheet" href="/static/main.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="auth-buttons">
+                {% if user.is_authenticated %}
+                <p>歡迎，{{ user.username }}！</p>
+                <a href="{% url 'logout' %}" class="auth-btn logout-btn">登出</a>
+            {% else %}
+                <a href="register/" class="auth-btn register-btn">註冊</a>
+                <a href="login/" class="auth-btn login-btn">登入</a>
+            {% endif %}
+            </div>
+        </header>
+
+        <!-- Account Summary -->
+        <section class="summary">
+            <div class="summary-header">
+                <p>全部帳本</p>
+                <p>日曆</p>
+            </div>
+            <div class="budget-section">
+                <p>預算: NT$0</p>
+                <p>剩餘: NT$0</p>
+            </div>
+            <div class="summary-cards">
+                <div class="expense-card">支出<br>NT$0</div>
+                <div class="income-card">收入<br>NT$0</div>
+            </div>
+            <p class="balance">結餘: NT$0</p>
+        </section>
+
+        <!-- Tabs -->
+        <section class="tabs">
+            <button class="tab active" data-tab="transactions">交易記錄</button>
+            <button class="tab" data-tab="charts">圖表分析</button>
+        </section>
+
+        <!-- Tab Content -->
+        <section id="transactions" class="tab-content active">
+            <h2>我的交易紀錄</h2>
+            <ul>
+                {% for record in records %}
+                    <li>
+                        <strong>分類：</strong> {{ record.category.category_name }} <br>
+                        <strong>金額：</strong> NT${{ record.price }} <br>
+                        <strong>日期：</strong> {{ record.date }} <br>
+                        <strong>說明：</strong> {{ record.describe }} <br>
+                        <strong>收支：</strong> {{ record.transaction_type }}
+                    </li>
+                {% empty %}
+                    <li>目前沒有紀錄。</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <a href="{% url 'record_input' %}">
+                <button class="record-btn">記帳</button>
+            </a>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

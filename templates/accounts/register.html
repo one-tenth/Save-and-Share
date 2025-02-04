@@ -1,0 +1,62 @@
+{% load static %}
+<link href="{% static 'main.css' %}" rel="stylesheet" />
+<form method="POST">
+    {% csrf_token %}
+    
+    <!-- 用戶名欄位 -->
+    <label for="username">用戶名:</label>
+    <input class="user" type="text" name="username" value="{{ form.username.value|default:'' }}">
+    {% if form.username.errors %}
+        <div class="error">
+            {% for error in form.username.errors %}
+                <p>{{ error }}</p>
+            {% endfor %}    
+        </div>
+    {% endif %}
+
+    <!-- 電子郵件欄位 -->
+    <label for="email">電子郵件:</label>
+    <input type="email" name="email" value="{{ form.email.value|default:'' }}">
+    {% if form.email.errors %}
+        <div class="error">
+            {% for error in form.email.errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- 電話號碼欄位 -->
+    <label for="phone">電話號碼:</label>
+    <input type="text" name="phone" value="{{ form.phone.value|default:'' }}">
+    {% if form.phone.errors %}
+        <div class="error">
+            {% for error in form.phone.errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- 密碼欄位 -->
+    <label for="password">密碼:</label>
+    <input type="password" name="password">
+    {% if form.password.errors %}
+        <div class="error">
+            {% for error in form.password.errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- 確認密碼欄位 -->
+    <label for="confirm_password">確認密碼:</label>
+    <input type="password" name="confirm_password">
+    {% if form.confirm_password.errors %}
+        <div class="error">
+            {% for error in form.confirm_password.errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+    </br>
+    <button type="submit">註冊</button>
+</form>

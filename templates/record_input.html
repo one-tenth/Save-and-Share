@@ -1,0 +1,21 @@
+<!-- record_input.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>記帳</title>
+</head>
+<body>
+    <h1>交易紀錄</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ record_form.as_p }}
+        <button type="submit">提交</button>
+    </form>
+
+
+    <a href="{% url 'category_management' %}">分類管理</a>
+</body>
+</html>
