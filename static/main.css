@@ -1,0 +1,213 @@
+@charset "utf-8";
+input.user{
+    width: 200px;
+}
+
+/* 登入與註冊按鈕 */
+.auth-buttons {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.auth-btn {
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.register-btn {
+    background-color: #4caf50;
+    color: white;
+}
+
+.register-btn:hover {
+    background-color: #45a049;
+}
+
+.login-btn {
+    background-color: #007bff;
+    color: white;
+}
+
+.login-btn:hover {
+    background-color: #0056b3;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+}
+
+.container {
+    max-width: 900px; /* 增加容器寬度以適應桌面 */
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    font-size: 18px;
+}
+
+.time {
+    font-size: 20px;
+}
+
+.month-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.month-selector span {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.month-selector button {
+    font-size: 18px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.summary {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.summary-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+    color: #555;
+}
+
+.budget-section p {
+    font-size: 20px;
+    margin: 10px 0;
+}
+
+.summary-cards {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+    gap: 20px;
+}
+
+.expense-card, .income-card {
+    flex: 1;
+    padding: 30px;
+    font-size: 24px;
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+}
+
+.expense-card {
+    background-color: #f44336;
+}
+
+.income-card {
+    background-color: #4caf50;
+}
+
+.balance {
+    font-size: 20px;
+    color: #007bff;
+}
+
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.tab {
+    flex: 1;
+    padding: 15px;
+    font-size: 18px;
+    border: none;
+    background-color: #f9f9f9;
+    cursor: pointer;
+}
+
+.tab.active {
+    font-weight: bold;
+    border-bottom: 3px solid black;
+}
+
+.footer {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.record-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 15px 50px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Tabs 樣式 */
+.tabs {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.tab {
+    font-size: 18px;
+    padding: 10px 20px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.tab.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.tab:hover {
+    background-color: #e0e0e0;
+}
+
+/* Tab Content */
+.tab-content {
+    display: none;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.tab-content.active {
+    display: block;
+}
+

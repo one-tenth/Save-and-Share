@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Capture Image</title>
+</head>
+<body>
+    <h1>Capture Image</h1>
+    <video id="video" width="640" height="480" autoplay></video>
+    <button id="snap">Snap Photo</button>
+    <canvas id="canvas" width="640" height="480"></canvas>
+    <form id="uploadForm" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="image" id="image">
+        <button type="submit">Upload Image</button>
+    </form>
+    <script>
+        // Access the device camera and stream to video element
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+        const snap = document.getElementById('snap');
+        const imageInput = document.getElementById('image');
+
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: { exact: "environment" } } })
+            .then((stream) => {
+                let video = document.querySelector("video");
+                if ("srcObject" in video) {
+                    video.srcObject = stream;
+                } else {
+                    video.src = URL.createObjectURL(stream);
+                }
+                video.play();
+            })
+            .catch((error) => {
+                console.error("無法開啟相機:", error);
+            });
+
+        // Capture the image when the button is clicked
+        snap.addEventListener('click', () => {
+            context.drawImage(video, 0, 0, 640, 480);
+            // 轉換成base64數據
+            const dataURL = canvas.toDataURL('image/png');
+            imageInput.value = dataURL;
+        });
+    </script>
+
+
+    <h2>解析結果：</h2>
+    {% if error %}
+        <p style="color: red;">❌ {{ error }}</p>
+    {% elif message %}
+        <p style="color: green;">✅ {{ message }}</p>
+        <ul>
+            {% for data in data %}
+                <li>{{ data }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>尚未上傳</p>
+    {% endif %}
+</body>
+</html>

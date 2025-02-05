@@ -36,7 +36,7 @@ class PhoneForm(forms.Form):
         validators=[
             RegexValidator(
                 regex = r'^09\d{2}-\d{3}-\d{3}$',
-                message="親親您輸入錯了，請輸入有效的台灣電話號碼 "
+                message="親親您輸入錯了，請輸入有效的台灣電話號碼 ^09\d{2}-\d{3}-\d{3}$"
             )
         ],
         required=True,
