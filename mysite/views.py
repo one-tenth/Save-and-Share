@@ -134,7 +134,6 @@ def upload_file(request):
             # 移除 base64 前綴，例如 "data:image/png;base64,"
             image_data = re.sub('^data:image/.+;base64,', '', image_data)
             image_bytes = base64.b64decode(image_data)  # 轉換回二進位格式
-            # print(image_bytes)
 
             # 轉換成 OpenCV 可讀格式
             image_array = np.frombuffer(image_bytes, dtype=np.uint8)
@@ -147,11 +146,32 @@ def upload_file(request):
             if not decoded_objects:
                 return render(request, 'front.html', {'error': '無法識別 QR Code'})
 
-            result = [obj.data.decode('utf-8') for obj in decoded_objects]
+            # 解析 QR Code 資料
+            raw_results = [obj.data.decode('utf-8') for obj in decoded_objects]
+            filtered_results = [process_qr_data(data) for data in raw_results]
 
-            return render(request, 'front.html', {'message': '解析成功', 'data': result})
+            return render(request, 'front.html', {'message': '解析成功', 'data': filtered_results})
 
         except Exception as e:
             return render(request, 'front.html', {'error': f'圖片處理錯誤: {str(e)}'})
 
-    return render(request, 'front.html', {'error': '請使用 POST 方法上傳圖片'})
+    return render(request, 'front.html')
+
+def process_qr_data(qr_text):
+    """
+    處理 QR Code 內容：
+    - 以 ":" 分割字串
+    - 只保留第 0 個元素的前 17 個字元
+    - 取第 5 個之後的元素
+    - 回傳新的字串
+    """
+    parts = qr_text.split(':')
+    
+    if len(parts) > 0:
+        first_part = parts[0][:16]  # 取前 17 個字
+    else:
+        first_part = ""
+
+    filtered_parts = [first_part] + parts[5:] if len(parts) > 5 else [first_part]
+    return ':'.join(filtered_parts)
+
