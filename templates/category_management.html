@@ -21,7 +21,7 @@
     </ul>
 
     <h2>新增分類</h2>
-    <form method="post" action="{% url 'create_category' %}">
+    <form method="post" action="{% url 'category_management' %}">
         {% csrf_token %}
         {{ category_form.as_p }}
         <button type="submit">新增分類</button>

@@ -1,164 +1,62 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Code 掃描</title>
-    <style>
-        body {
-            text-align: center;
-            font-family: Arial, sans-serif;
-        }
-        #result {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            background-color: white;
-            padding: 10px;
-            border: 1px solid black;
-            z-index: 1000;
-            display: none; /* 預設隱藏結果 */
-        }
-        #controls {
-            margin-top: 10px;
-        }
-    </style>
+    <title>Capture Image</title>
 </head>
 <body>
-    <h1>QR Code 掃描</h1>
+    <h1>Capture Image</h1>
     <video id="video" width="640" height="480" autoplay></video>
-    <canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
-    <div id="result"></div>
-
-    <div id="controls">
-        <button onclick="toggleCamera()">🔄 切換鏡頭</button>
-        <button onclick="restartDetection()">🔁 重新掃描</button>
-    </div>
-
+    <button id="snap">Snap Photo</button>
+    <canvas id="canvas" width="640" height="480"></canvas>
+    <form id="uploadForm" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="image" id="image">
+        <button type="submit">Upload Image</button>
+    </form>
     <script>
-        let currentFacingMode = "environment"; // 預設使用後置鏡頭
-        let isProcessing = false; // 防止多次請求
-        let stopDetection = false; // 停止檢測標誌
-        let lastScanned = ""; // 避免重複掃描相同 QR Code
-
+        // Access the device camera and stream to video element
         const video = document.getElementById('video');
         const canvas = document.getElementById('canvas');
         const context = canvas.getContext('2d');
-        const resultDiv = document.getElementById('result');
+        const snap = document.getElementById('snap');
+        const imageInput = document.getElementById('image');
 
-        function startCamera(facingMode) {
-            navigator.mediaDevices.getUserMedia({ video: { facingMode: facingMode } })
-                .then((stream) => {
-                    if ("srcObject" in video) {
-                        video.srcObject = stream;
-                    } else {
-                        video.src = URL.createObjectURL(stream);
-                    }
-                    video.play();
-                    requestAnimationFrame(detectQRCode);
-                })
-                .catch((error) => {
-                    console.error("無法開啟相機:", error);
-                    alert("無法開啟相機，請確保您的瀏覽器已授權相機訪問權限。");
-                });
-        }
-
-        function detectQRCode() {
-            if (isProcessing || stopDetection) {
-                requestAnimationFrame(detectQRCode);
-                return;
-            }
-
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            const dataURL = canvas.toDataURL('image/png');
-
-            isProcessing = true;
-            fetch('/upload_file/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken')
-                },
-                body: JSON.stringify({ image: dataURL })
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: { exact: "environment" } } })
+            .then((stream) => {
+                let video = document.querySelector("video");
+                if ("srcObject" in video) {
+                    video.srcObject = stream;
+                } else {
+                    video.src = URL.createObjectURL(stream);
+                }
+                video.play();
             })
-            .then(response => response.json())
-            .then(data => {
-                isProcessing = false;
-                if (data.error) {
-                    console.error(`❌ ${data.error}`);
-                } else if (data.invoice_data.invNum !== lastScanned) {
-                    lastScanned = data.invoice_data.invNum; // 記錄掃描結果
-                    console.log(`✅ ${data.message}`);
-                    
-                    resultDiv.innerHTML = `
-                        <p>${data.message}</p>
-                        <p>發票號碼: ${data.invoice_data.invNum}</p>
-                        <p>發票日期: ${data.invoice_data.invDate}</p>
-                        <p>商家名稱: ${data.invoice_data.sellerName}</p>
-                        <p>總金額: ${data.invoice_data.amount} ${data.invoice_data.currency}</p>
-                        <h3>品項明細:</h3>
-                        <ul>${data.invoice_data.details.map(item => `<li>${item.description} x ${item.quantity}，單價 ${item.unitPrice}，小計 ${item.amount}</li>`).join('')}</ul>
-                    `;
-
-                    resultDiv.style.display = "block"; // 顯示結果
-                    stopDetection = true; // 停止進一步的檢測
-
-                    // 5 秒後允許重新掃描
-                    setTimeout(() => {
-                        stopDetection = false;
-                        lastScanned = "";
-                        requestAnimationFrame(detectQRCode);
-                    }, 5000);
-                }
-
-                if (!stopDetection) {
-                    requestAnimationFrame(detectQRCode);
-                }
-            })
-            .catch(error => {
-                isProcessing = false;
-                console.error("Error uploading photo: ", error);
-                if (!stopDetection) {
-                    requestAnimationFrame(detectQRCode);
-                }
+            .catch((error) => {
+                console.error("無法開啟相機:", error);
             });
-        }
 
-        function toggleCamera() {
-            stopDetection = true;
-            currentFacingMode = currentFacingMode === "environment" ? "user" : "environment";
-            if (video.srcObject) {
-                video.srcObject.getTracks().forEach(track => track.stop());
-            }
-            startCamera(currentFacingMode);
-            stopDetection = false;
-        }
-
-        function restartDetection() {
-            stopDetection = false;
-            lastScanned = "";
-            resultDiv.style.display = "none"; // 隱藏結果
-            requestAnimationFrame(detectQRCode);
-        }
-
-        // 初始化相機
-        startCamera(currentFacingMode);
-
-        // 獲取 CSRF token 的函數
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
+        // Capture the image when the button is clicked
+        snap.addEventListener('click', () => {
+            context.drawImage(video, 0, 0, 640, 480);
+            // 轉換成base64數據
+            const dataURL = canvas.toDataURL('image/png');
+            imageInput.value = dataURL;
+        });
     </script>
+
+
+    <h2>解析結果：</h2>
+    {% if error %}
+        <p style="color: red;">❌ {{ error }}</p>
+    {% elif message %}
+        <p style="color: green;">✅ {{ message }}</p>
+        <ul>
+            {% for data in data %}
+                <li>{{ data }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>尚未上傳</p>
+    {% endif %}
 </body>
 </html>

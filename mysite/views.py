@@ -61,17 +61,17 @@ def user_logout(request):
     logout(request)
     return redirect('index')
 #---------------------------------------------------------------
-#record
-@login_required  # 確保只有登入用戶才能訪問此視圖
-def record_input(request):
-    if request.method == 'POST':
-        # 處理 POST 請求的邏輯
-        pass
-    return render(request, 'record_input.html')
+# #record
+# @login_required  # 確保只有登入用戶才能訪問此視圖
+# def record_input(request):
+#     if request.method == 'POST': 
+#         # 處理 POST 請求的邏輯
+#         pass
+#     return render(request, 'record_input.html')
 #---------------------------------------------------------------
 #record
 @login_required  # 確保只有登入用戶才能訪問此視圖
-def record_input(request):
+def record_input(request):  
     if request.method == 'POST':
         record_form = RecordForm(request.POST)
         if record_form.is_valid():
@@ -128,7 +128,7 @@ def upload_file(request):
         image_data = request.POST.get('image')  # 取得 Base64 圖片數據
         
         if not image_data:
-            return render(request, 'capture_image.html', {'error': '請提供有效的圖片'})
+            return render(request, 'front.html', {'error': '請提供有效的圖片'})
 
         try:
             # 移除 base64 前綴，例如 "data:image/png;base64,"
@@ -145,13 +145,13 @@ def upload_file(request):
             decoded_objects = decode(gray_image)
 
             if not decoded_objects:
-                return render(request, 'capture_image.html', {'error': '無法識別 QR Code'})
+                return render(request, 'front.html', {'error': '無法識別 QR Code'})
 
             result = [obj.data.decode('utf-8') for obj in decoded_objects]
 
-            return render(request, 'capture_image.html', {'message': '解析成功', 'data': result})
+            return render(request, 'front.html', {'message': '解析成功', 'data': result})
 
         except Exception as e:
-            return render(request, 'capture_image.html', {'error': f'圖片處理錯誤: {str(e)}'})
+            return render(request, 'front.html', {'error': f'圖片處理錯誤: {str(e)}'})
 
-    return render(request, 'capture_image.html', {'error': '請使用 POST 方法上傳圖片'})
+    return render(request, 'front.html', {'error': '請使用 POST 方法上傳圖片'})
