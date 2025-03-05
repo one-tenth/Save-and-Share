@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>語音輸入範例</title>
+</head>
+<body>
+
+    <button id="start">開始語音輸入</button>  <!-- 開始按鈕 -->
+    <button id="pause" disabled>暫停語音識別</button>  <!-- 暫停按鈕，初始時禁用 -->
+    <input type="text" id="text-input" placeholder="說點什麼..." readonly>  <!-- 顯示語音輸入結果 -->
+
+    <script>
+        const startBtn = document.getElementById('start');
+        const pauseBtn = document.getElementById('pause');
+        const textInput = document.getElementById('text-input');
+
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = "zh-TW";  // 設定語音識別語言為繁體中文
+
+        // 當語音識別開始時
+        recognition.onstart = function() {
+            console.log("語音識別已啟動，請開始說話。");
+            startBtn.disabled = true;  // 開始按鈕禁用
+            pauseBtn.disabled = false;  // 啟用暫停按鈕
+        };
+
+        // 當語音識別結束時
+        recognition.onend = function() {
+            console.log("語音識別已結束。");
+            startBtn.disabled = false;  // 啟用開始按鈕
+            pauseBtn.disabled = true;   // 禁用暫停按鈕
+        };
+
+        // 當語音識別有結果時
+        recognition.onresult = function(event) {
+            const transcript = event.results[0][0].transcript;
+            textInput.value = transcript; // 顯示語音識別的文字
+
+            // 發送語音識別結果到後端
+            fetch('/voice/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ voice_input: transcript })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);  // 顯示來自後端的訊息
+            })
+            .catch(error => {
+                console.error('發生錯誤:', error);
+            });
+        };
+
+        // 開始語音識別
+        startBtn.addEventListener('click', function() {
+            recognition.start(); // 開始語音識別
+        });
+
+        // 暫停語音識別
+        pauseBtn.addEventListener('click', function() {
+            recognition.stop(); // 停止語音識別
+        });
+    </script>
+
+</body>
+</html>

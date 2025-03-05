@@ -28,4 +28,5 @@ urlpatterns = [
     path('record_input/', views.record_input, name='record_input'),
     path('category_management/', views.category_management, name='category_management'),  # 顯示所有分類並管理
     path('upload_file/', views.upload_file, name='upload_file'),
+    path('voice/', views.voice, name='voice'),
 ]
