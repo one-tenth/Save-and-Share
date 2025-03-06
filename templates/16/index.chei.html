@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>記帳介面</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="container">
+        <!-- 上方分類按鈕 -->
+        <div class="category-bar">
+            <button class="category-btn active">購物</button>
+            <button class="category-btn">吃喝</button>
+            <button class="category-btn">交通</button>
+            <button class="category-btn">娛樂</button>
+        </div>
+
+        <!-- 中間分類區域 -->
+        <div class="category-grid">
+            <button class="category-item active">其他購物</button>
+            <button class="category-item">酒</button>
+            <button class="category-item">樂器</button>
+            <button class="category-item">飾品</button>
+            <button class="category-item">母嬰</button>
+            <button class="category-item">禮物</button>
+            <button class="category-item">香煙</button>
+            <button class="category-item">玩具</button>
+            <button class="category-item">箱包</button>
+            <button class="category-item">化妝品</button>
+            <button class="category-item">家電</button>
+            <button class="category-item">花卉</button>
+        </div>
+
+        <!-- 金額顯示區 -->
+        <div class="amount-display">
+            <span>NT$</span><span id="amount">0</span>
+        </div>
+
+        <!-- 數字鍵盤 -->
+        <div class="numpad">
+            <button class="num-btn">1</button>
+            <button class="num-btn">2</button>
+            <button class="num-btn">3</button>
+            <button class="num-btn">4</button>
+            <button class="num-btn">5</button>
+            <button class="num-btn">6</button>
+            <button class="num-btn">7</button>
+            <button class="num-btn">8</button>
+            <button class="num-btn">9</button>
+            <button class="num-btn">0</button>
+            <button class="num-btn" id="clear">AC</button>
+        </div>
+
+        <!-- 底部功能按鈕 -->
+        <div class="bottom-buttons">
+            <input type="date" id="date-picker">
+            <label for="image-upload" class="upload-btn">📷 上傳圖片</label>
+            <input type="file" id="image-upload" accept="image/*" hidden>
+            <button class="confirm-btn">確定</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

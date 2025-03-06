@@ -1,0 +1,117 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 90%;
+    max-width: 400px;
+    background-color: white;
+    margin: 20px auto;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 上方分類按鈕 */
+.category-bar {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 10px;
+}
+
+.category-btn {
+    border: none;
+    background: none;
+    font-size: 16px;
+    padding: 10px;
+    cursor: pointer;
+    color: gray;
+}
+
+.category-btn.active {
+    font-weight: bold;
+    color: black;
+    border-bottom: 2px solid black;
+}
+
+/* 中間分類 */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.category-item {
+    background-color: #eee;
+    border: none;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.category-item.active {
+    border: 2px solid blue;
+    background-color: white;
+}
+
+/* 金額顯示 */
+.amount-display {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* 數字鍵盤 */
+.numpad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.num-btn {
+    background-color: #ddd;
+    border: none;
+    padding: 15px;
+    font-size: 18px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.num-btn:hover {
+    background-color: #bbb;
+}
+
+#clear {
+    background-color: red;
+    color: white;
+}
+
+/* 底部功能按鈕 */
+.bottom-buttons {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.upload-btn {
+    background-color: #ccc;
+    padding: 8px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.confirm-btn {
+    background-color: green;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+}
